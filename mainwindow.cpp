@@ -23,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
             }
             else
             {
-                ui->dbInfo->setText("Database cannot created");
+                if(this->query->lastError().text() != "No query Unable to fetch row")
+                    ui->dbInfo->setText("Database cannot created");
             }
         }
     }
@@ -37,19 +38,17 @@ MainWindow::~MainWindow()
 bool MainWindow::checkDbExist()
 {
     this->query->prepare("SELECT count(*) AS ToDo FROM ToDoNote");
-    //this->query->prepare("INSERT INTO ToDoNote (ToDoNote) VALUES ('Nowa notatka')");
     if(this->query->exec())
     {
         while(this->query->next())
         {
             QString retVal = this->query->value(this->query->record().indexOf("ToDoNote")).toString();
 
-            if(retVal!="")
-                return true;
-
-
-                return false;
+            if(retVal!="")return true;
+            else return false;
         }
     }
     else return false;
+
+    return false;
 }
