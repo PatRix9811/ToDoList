@@ -53,3 +53,11 @@ bool MainWindow::checkDbExist()
 
     return false;
 }
+
+void MainWindow::on_pbAdd_clicked()
+{
+    QCheckBox item(ui->leAddVal->text());
+    this->itemsList.push_back(item);
+   // this->itemsList.first().setText(ui->leAddVal->text());
+    ui->leAddVal->clear();
+}
