@@ -29,4 +29,5 @@ private:
     QSqlDatabase database;
     QSqlQuery* query;
 };
+
 #endif // MAINWINDOW_H
