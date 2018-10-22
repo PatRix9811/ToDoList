@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="leAddVal">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -24,7 +24,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="pbAdd">
     <property name="geometry">
      <rect>
       <x>200</x>
@@ -41,12 +41,25 @@
     <property name="geometry">
      <rect>
       <x>9</x>
-      <y>39</y>
+      <y>59</y>
       <width>261</width>
-      <height>461</height>
+      <height>441</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout"/>
+   </widget>
+   <widget class="QLabel" name="dbInfo">
+    <property name="geometry">
+     <rect>
+      <x>26</x>
+      <y>39</y>
+      <width>211</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
  </widget>

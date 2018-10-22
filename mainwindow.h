@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
-#include <QPushButton>
+#include <QSql>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSqlRecord>
 
 namespace Ui {
 class MainWindow;
@@ -16,18 +19,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    bool checkDbExist();
+
+private slots:
 
 private:
     Ui::MainWindow *ui;
+    //Database
+    QSqlDatabase database;
+    QSqlQuery* query;
 };
-
-class ListItem : public QLabel
-{
-public:
-    ListItem(QString value,QPushButton* pb);
-
-private:
-    QPushButton* delButton;
-};
-
 #endif // MAINWINDOW_H
