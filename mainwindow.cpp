@@ -54,18 +54,24 @@ bool MainWindow::checkDbExist()
     return false;
 }
 
+void MainWindow::addItemToList(QCheckBox* toList)
+{
+    ui->list->addWidget(toList);
+}
+
 void MainWindow::on_pbAdd_clicked()
 {
-    this->itemsList.push_back(new QCheckBox(ui->leAddVal->text(),this));
     this->query->prepare("INSERT INTO ToDoNote VALUES (:ToDo)");
     this->query->bindValue(":ToDo",ui->leAddVal->text());
 
     if(this->query->exec())
     {
+        this->itemsList.push_back(new QCheckBox(ui->leAddVal->text(),this));
+        this->addItemToList(this->itemsList.last());
         ui->dbInfo->setText(this->itemsList.last()->text()+" was added");
         ui->leAddVal->clear();
     }else
     {
-         ui->dbInfo->setText(this->query->lastQuery());
+         ui->dbInfo->setText("Record cannot add to database.");
     }
 }

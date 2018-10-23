@@ -22,6 +22,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     bool checkDbExist();
+    void addItemToList(QCheckBox* toList);
+    //void showItemsList();
 
 private slots:
     void on_pbAdd_clicked();
