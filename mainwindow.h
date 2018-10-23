@@ -24,7 +24,6 @@ public:
     bool checkDbExist();
 
 private slots:
-//!!!!!!!!!! Do poprawy
     void on_pbAdd_clicked();
 
 private:
@@ -34,7 +33,7 @@ private:
     QSqlQuery* query;
 
     //ListItem vector
-    QVector<QCheckBox> itemsList;
+    QVector<QCheckBox*> itemsList;
 };
 
 #endif // MAINWINDOW_H
