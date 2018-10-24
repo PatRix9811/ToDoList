@@ -7,7 +7,6 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
-#include <QVector>
 #include <QCheckBox>
 
 namespace Ui {
@@ -23,10 +22,12 @@ public:
     ~MainWindow();
     bool checkDbExist();
     void addItemToList(QCheckBox* toList);
-    //void showItemsList();
+    void loadItemsFromDatabase();
+    void connecDatabase();
 
 private slots:
     void on_pbAdd_clicked();
+    void delItem();
 
 private:
     Ui::MainWindow *ui;
@@ -35,7 +36,7 @@ private:
     QSqlQuery* query;
 
     //ListItem vector
-    QVector<QCheckBox*> itemsList;
+    QList<QCheckBox*> itemsList;
 };
 
 #endif // MAINWINDOW_H

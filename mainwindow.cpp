@@ -6,6 +6,80 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->connecDatabase();
+}
+
+MainWindow::~MainWindow()
+{
+    delete this->query;
+    delete ui;
+}
+
+bool MainWindow::checkDbExist()
+{
+    this->query->prepare("SELECT count(*) AS ToDo FROM ToDoNote");
+    if(this->query->exec())
+    {
+        while(this->query->next())
+        {
+            QString retVal = this->query->value(this->query->record().indexOf("ToDo")).toString();
+
+            if(retVal!="")return true;
+            else return false;
+        }
+    }
+    else return false;
+
+    return false;
+}
+
+void MainWindow::addItemToList(QCheckBox* toList)
+{
+    ui->list->addWidget(toList);
+}
+
+void MainWindow::loadItemsFromDatabase()
+{
+    this->query->prepare("SELECT count(ToDoNote) as HowMuch FROM ToDoNote");
+    if(this->query->exec())
+    {
+        while(this->query->next())
+        {
+            QString retVal = this->query->value(this->query->record().indexOf("HowMuch")).toString();
+            if(retVal == "0") return;
+
+            break;
+        }
+
+        this->query->prepare("SELECT * FROM ToDoNote");
+
+        if(this->query->exec())
+        {
+            while(this->query->next())
+            {
+                QString retVal = this->query->value(this->query->record().indexOf("ToDoNote")).toString();
+
+                QCheckBox* cb =new QCheckBox(retVal,this);
+
+                connect(cb,SIGNAL(clicked(bool)),cb,SLOT(setHidden(bool)));
+                connect(cb,&QCheckBox::clicked,this,&MainWindow::delItem);
+
+                this->itemsList.push_back(cb);
+                addItemToList(cb);
+            }
+        }else
+        {
+            ui->dbInfo->setText("Filed load records from database");
+        }
+
+    }else
+    {
+        ui->dbInfo->setText("Filed load records from database");
+    }
+}
+
+void MainWindow::connecDatabase()
+{
     this->database = QSqlDatabase::addDatabase("QSQLITE");
     this->query = new QSqlQuery(this->database);
     this->database.setDatabaseName("ToDoNote.db");
@@ -26,47 +100,50 @@ MainWindow::MainWindow(QWidget *parent) :
                 if(this->query->lastError().text() != "No query Unable to fetch row")
                     ui->dbInfo->setText("Database cannot created");
             }
-        }
-    }
-}
-
-MainWindow::~MainWindow()
-{
-    delete this->query;
-    delete ui;
-}
-
-bool MainWindow::checkDbExist()
-{
-    this->query->prepare("SELECT count(*) AS ToDo FROM ToDoNote");
-    if(this->query->exec())
-    {
-        while(this->query->next())
+        }else
         {
-            QString retVal = this->query->value(this->query->record().indexOf("ToDoNote")).toString();
-
-            if(retVal!="")return true;
-            else return false;
+            this->loadItemsFromDatabase();
         }
     }
-    else return false;
-
-    return false;
 }
 
-void MainWindow::addItemToList(QCheckBox* toList)
+void MainWindow::delItem()
 {
-    ui->list->addWidget(toList);
+    for(int item=0;item<this->itemsList.count();item++)
+    {
+        if(this->itemsList.at(item)->isChecked())
+        {
+            this->query->prepare("DELETE FROM ToDoNote WHERE ToDoNote LIKE :val");
+            this->query->bindValue(":val",this->itemsList.at(item)->text());
+
+            if(this->query->exec())
+            {
+                this->itemsList.removeOne(this->itemsList.at(item));
+                ui->dbInfo->setText("Deleted correctly.");
+            }else
+            {
+                ui->dbInfo->setText("Deleted incorrectly.");
+            }
+
+        }
+    }
 }
 
 void MainWindow::on_pbAdd_clicked()
 {
+    if(ui->leAddVal->text()=="")return;
+
     this->query->prepare("INSERT INTO ToDoNote VALUES (:ToDo)");
     this->query->bindValue(":ToDo",ui->leAddVal->text());
 
     if(this->query->exec())
     {
-        this->itemsList.push_back(new QCheckBox(ui->leAddVal->text(),this));
+        QCheckBox* cb =new QCheckBox(ui->leAddVal->text(),this);
+
+        connect(cb,SIGNAL(toggled(bool)),cb,SLOT(setHidden(bool)));
+        connect(cb,&QCheckBox::clicked,this,&MainWindow::delItem);
+
+        this->itemsList.push_back(cb);
         this->addItemToList(this->itemsList.last());
         ui->dbInfo->setText(this->itemsList.last()->text()+" was added");
         ui->leAddVal->clear();
