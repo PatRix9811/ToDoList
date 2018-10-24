@@ -8,10 +8,14 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QCheckBox>
+#include <QSystemTrayIcon>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
 }
+
+class QSystemTrayIcon;
 
 class MainWindow : public QMainWindow
 {
@@ -37,6 +41,8 @@ private:
 
     //ListItem vector
     QList<QCheckBox*> itemsList;
+
+    QSystemTrayIcon* trayIcon;
 };
 
 #endif // MAINWINDOW_H

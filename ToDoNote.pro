@@ -32,3 +32,8 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+RC_ICONS = myappico.ico
+
+RESOURCES += \
+    res.qrc
