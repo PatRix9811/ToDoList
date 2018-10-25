@@ -6,17 +6,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->trayIcon = new QSystemTrayIcon(this);
-    this->trayIcon->setIcon(QIcon(":/myappico.png"));
-    this->trayIcon->setVisible(true);
-    this->trayIcon->showMessage(tr("ToDoNote"),tr("ToDoNote is running"));
     this->connecDatabase();
+    this->tray();
 }
 
 MainWindow::~MainWindow()
 {
     delete this->query;
     delete ui;
+}
+
+void MainWindow::tray()
+{
+    this->trayIcon = new QSystemTrayIcon(this);
+    this->trayIcon->setIcon(QIcon(":/myappico.png"));
+    this->trayIcon->setVisible(true);
+    this->trayIcon->showMessage("ToDoNote","Running aplication",QIcon(":/myappico.png"));
 }
 
 bool MainWindow::checkDbExist()

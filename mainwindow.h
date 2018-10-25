@@ -9,7 +9,6 @@
 #include <QSqlRecord>
 #include <QCheckBox>
 #include <QSystemTrayIcon>
-#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -28,6 +27,7 @@ public:
     void addItemToList(QCheckBox* toList);
     void loadItemsFromDatabase();
     void connecDatabase();
+    void tray();
 
 private slots:
     void on_pbAdd_clicked();
@@ -39,9 +39,10 @@ private:
     QSqlDatabase database;
     QSqlQuery* query;
 
-    //ListItem vector
+    //Task List
     QList<QCheckBox*> itemsList;
 
+    //Tray
     QSystemTrayIcon* trayIcon;
 };
 
