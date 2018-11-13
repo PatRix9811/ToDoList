@@ -55,7 +55,7 @@ void MainWindow::addToAutostart()
         QString command = "reg ADD HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v ToDoList /t REG_SZ /f /d ";
         command.append(arg);
 
-        if(true)
+        if(!QProcess::execute(command))
         {
             ui->dbInfo->setText("Correctly added to autostart");
             settings->write("TRUE");
