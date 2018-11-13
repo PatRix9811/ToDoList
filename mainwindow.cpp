@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     this->connecDatabase();
     this->tray();
+    this->addToAutostart();
 }
 
 MainWindow::~MainWindow()
@@ -22,6 +23,60 @@ void MainWindow::tray()
     this->trayIcon->setIcon(QIcon(":/myappico.png"));
     this->trayIcon->setVisible(true);
     this->trayIcon->showMessage("ToDoNote","Running aplication",QIcon(":/myappico.png"));
+    this->trayMenu = new QMenu(this);
+    trayMenu->addAction("Hide",this,SLOT(setVisible(bool)));
+    trayMenu->addAction("Show",this,SLOT(setHidden(bool)));
+    this->trayIcon->setContextMenu(this->trayMenu);
+}
+
+void MainWindow::addToAutostart()
+{
+    QFile* settings = new QFile("settings.txt");
+    QByteArray data;
+
+    if(settings->open(QFile::OpenModeFlag::ReadWrite))
+    {
+        data=settings->read(4);
+    }else return;
+
+    if(this->checkAutostart(data.toStdString()))
+        return;
+
+
+    QMessageBox addMB;
+    addMB.setText("Autostart");
+    addMB.setInformativeText("Do you want add this application to autostart?");
+    addMB.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+
+    if(addMB.exec() == QMessageBox::Yes)
+    {
+        //  "reg ADD HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v ToDoList /t REG_SZ /f /d "
+        QString arg = QApplication::arguments()[0];
+        QString command = "reg ADD HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v ToDoList /t REG_SZ /f /d ";
+        command.append(arg);
+
+        if(true)
+        {
+            ui->dbInfo->setText("Correctly added to autostart");
+            settings->write("TRUE");
+
+        }
+        else
+        {
+            ui->dbInfo->setText("Filed add to autostart");
+            return;
+        }
+    }
+
+    settings->close();
+}
+
+bool MainWindow::checkAutostart(std::string data)
+{
+    if(data =="TRUE")
+    return true;
+
+    return false;
 }
 
 bool MainWindow::checkDbExist()

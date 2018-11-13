@@ -9,6 +9,9 @@
 #include <QSqlRecord>
 #include <QCheckBox>
 #include <QSystemTrayIcon>
+#include <QMessageBox>
+#include <QFile>
+#include <QMenu>
 
 namespace Ui {
 class MainWindow;
@@ -28,6 +31,8 @@ public:
     void loadItemsFromDatabase();
     void connecDatabase();
     void tray();
+    void addToAutostart();
+    bool checkAutostart(std::string);
 
 private slots:
     void on_pbAdd_clicked();
@@ -44,6 +49,7 @@ private:
 
     //Tray
     QSystemTrayIcon* trayIcon;
+    QMenu* trayMenu;
 };
 
 #endif // MAINWINDOW_H
