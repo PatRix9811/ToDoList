@@ -74,7 +74,9 @@ void MainWindow::addToAutostart()
 bool MainWindow::checkAutostart(std::string data)
 {
     if(data =="TRUE")
-    return true;
+    {
+        return true;
+    }
 
     return false;
 }
